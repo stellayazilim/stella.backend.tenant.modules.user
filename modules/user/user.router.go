@@ -1,8 +1,14 @@
 package user
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
+)
 
 func UserRouter(r *gin.RouterGroup, c UserController) {
+
+	fmt.Println("router registered")
 	r.GET("", c.GetAll)
 	r.POST("", c.Save)
 	r.GET(":id", c.GetById)

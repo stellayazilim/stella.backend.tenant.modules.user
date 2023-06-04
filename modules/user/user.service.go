@@ -4,72 +4,78 @@ import (
 	"fmt"
 
 	"github.com/stellayazilim/stella.backend.tenants/entities"
+	"github.com/stellayazilim/stella.backend.tenants/modules/database"
+	"gorm.io/gorm"
 )
 
 type UserService interface {
 	GetAll() []entities.User
 	GetById(uint64) (entities.User, error)
-	Save(entities.User)
+	Save(entities.User) error
 	UpdateById(uint64, entities.User) error
 	DeleteById(uint64) error
 }
 
 type userService struct {
 	users []entities.User
+	db    *gorm.DB
 	index uint64
 }
 
 func Service() UserService {
 	return &userService{
 		index: 0,
+		db:    database.Db,
 	}
 }
 
 func (s *userService) GetAll() []entities.User {
-	return s.users
+
+	result := []entities.User{}
+	s.db.Find(&result)
+
+	return result
 }
 
-func (s *userService) Save(u entities.User) {
+func (s *userService) Save(u entities.User) error {
 
-	u.Id = s.index
-	s.index++
-	s.users = append(s.users, u)
+	e := s.db.Save(&u).Error
+	return e
 }
 
 func (s *userService) GetById(id uint64) (entities.User, error) {
 
-	for _, v := range s.users {
+	user := entities.User{}
+	err := s.db.First(&user, id).Error
 
-		if v.Id == id {
-			return v, nil
-		}
+	if err != nil {
+		return entities.User{}, err
 	}
-
-	return entities.User{}, fmt.Errorf("User not found")
+	return user, nil
 
 }
 
 func (s *userService) UpdateById(id uint64, data entities.User) error {
 
-	for _, v := range s.users {
+	// for _, v := range s.users {
 
-		if v.Id == id {
-			s.users[id].Name = data.Name
-			return nil
-		}
-	}
+	// 	if v..Id == id {
+	// 		s.users[id].Name = data.Name
+	// 		return nil
+	// 	}
+	// }
 
 	return fmt.Errorf("not found")
 
 }
 
 func (s *userService) DeleteById(id uint64) error {
-	for _, v := range s.users {
+	// for _, v := range s.users {
 
-		if v.Id == id {
-			s.users = append(s.users[:id], s.users[id+1:]...)
-			return nil
-		}
-	}
+	// 	if v.Id == id {
+	// 		s.users = append(s.users[:id], s.users[id+1:]...)
+	// 		return nil
+	// 	}
+	// }
 	return fmt.Errorf("not found")
 }

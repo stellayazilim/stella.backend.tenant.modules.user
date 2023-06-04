@@ -1,6 +1,7 @@
 package database
 
 import (
+	"github.com/stellayazilim/stella.backend.tenants/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -13,6 +14,7 @@ var Db *gorm.DB
 func DatabaseModule() {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
+	db.AutoMigrate(&entities.User{})
 	if err != nil {
 		panic(err)
 	}
