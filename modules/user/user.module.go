@@ -2,7 +2,7 @@ package user
 
 import "github.com/gin-gonic/gin"
 
-func UserModule(r *gin.RouterGroup) {
+func InitalizeUserModule(r *gin.RouterGroup) {
 
 	// stack
 	UserRouter(r, Controller())

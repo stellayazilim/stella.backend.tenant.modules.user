@@ -1,11 +1,24 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator"
 	"github.com/stellayazilim/stella.backend.tenants/modules"
 )
 
 func main() {
+
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// registering validation for nontoneof
+		v.RegisterValidation("isString", func(fl validator.FieldLevel) bool {
+			// split values using ` `. eg. notoneof=bob rob job
+			fmt.Println(fl)
+			return false
+		})
+	}
 	r := gin.Default()
 	modules.MainModule(r)
 

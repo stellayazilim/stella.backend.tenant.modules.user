@@ -1,6 +1,7 @@
 package user
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 // interface
 type UserController interface {
 	GetAll(*gin.Context)
-	Save(*gin.Context)
+	Create(*gin.Context)
 	GetById(*gin.Context)
 	UpdateById(*gin.Context)
 	DeleteById(*gin.Context)
@@ -35,11 +36,14 @@ func (c *userController) GetAll(ctx *gin.Context) {
 }
 
 // save user
-func (c *userController) Save(ctx *gin.Context) {
+func (c *userController) Create(ctx *gin.Context) {
 
 	user := entities.User{}
-	ctx.BindJSON(&user)
+	err := ctx.ShouldBindJSON(&user)
 
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 	c.userService.Create(user)
 
 	ctx.AbortWithStatus(200)

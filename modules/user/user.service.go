@@ -23,7 +23,7 @@ type userService struct {
 func Service() UserService {
 	return &userService{
 		index: 0,
-		db:    database.Db,
+		db:    database.GetInstance(),
 	}
 }
 

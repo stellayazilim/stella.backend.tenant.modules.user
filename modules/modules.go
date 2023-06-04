@@ -7,8 +7,10 @@ import (
 )
 
 func MainModule(e *gin.Engine) {
+
 	// stack modules here
-	database.DatabaseModule()
-	user.UserModule(e.Group("/users"))
+	database.InitalizeDatabase()
+
+	user.InitalizeUserModule(e.Group("/users"))
 
 }
