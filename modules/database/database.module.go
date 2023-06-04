@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// will be moved here, dw about exposed credentials
 var dsn = "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Istanbul"
 
 var Db *gorm.DB
