@@ -40,7 +40,7 @@ func (c *userController) Save(ctx *gin.Context) {
 	user := entities.User{}
 	ctx.BindJSON(&user)
 
-	c.userService.Save(user)
+	c.userService.Create(user)
 
 	ctx.AbortWithStatus(200)
 }
