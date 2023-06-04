@@ -45,6 +45,7 @@ func (c *userController) Save(ctx *gin.Context) {
 	ctx.AbortWithStatus(200)
 }
 
+// get single user by id
 func (c *userController) GetById(ctx *gin.Context) {
 
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
@@ -63,6 +64,7 @@ func (c *userController) GetById(ctx *gin.Context) {
 	ctx.JSON(200, user)
 }
 
+// update user by id
 func (c *userController) UpdateById(ctx *gin.Context) {
 
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
@@ -83,6 +85,7 @@ func (c *userController) UpdateById(ctx *gin.Context) {
 	ctx.AbortWithStatus(200)
 }
 
+// delete user by id
 func (c *userController) DeleteById(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
 	if err != nil {
