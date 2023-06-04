@@ -1,8 +1,6 @@
 package user
 
 import (
-	"fmt"
-
 	"github.com/stellayazilim/stella.backend.tenants/entities"
 	"github.com/stellayazilim/stella.backend.tenants/modules/database"
 	"gorm.io/gorm"
@@ -11,7 +9,7 @@ import (
 type UserService interface {
 	GetAll() []entities.User
 	GetById(uint64) (entities.User, error)
-	Save(entities.User) error
+	Create(entities.User) error
 	UpdateById(uint64, entities.User) error
 	DeleteById(uint64) error
 }
@@ -37,9 +35,9 @@ func (s *userService) GetAll() []entities.User {
 	return result
 }
 
-func (s *userService) Save(u entities.User) error {
+func (s *userService) Create(u entities.User) error {
 
-	e := s.db.Save(&u).Error
+	e := s.db.Create(&u).Error
 	return e
 }
 
@@ -57,25 +55,16 @@ func (s *userService) GetById(id uint64) (entities.User, error) {
 
 func (s *userService) UpdateById(id uint64, data entities.User) error {
 
-	// for _, v := range s.users {
+	err := s.db.Find(&entities.User{}, id).Updates(data).Error
 
-	// 	if v..Id == id {
-	// 		s.users[id].Name = data.Name
-	// 		return nil
-	// 	}
-	// }
-
-	return fmt.Errorf("not found")
+	return err
 
 }
 
 func (s *userService) DeleteById(id uint64) error {
-	// for _, v := range s.users {
 
-	// 	if v.Id == id {
-	// 		s.users = append(s.users[:id], s.users[id+1:]...)
-	// 		return nil
-	// 	}
-	// }
-	return fmt.Errorf("not found")
+	delUser := entities.User{}
+	delUser.ID = id
+	err := s.db.Delete(&delUser).Error
+	return err
 }
