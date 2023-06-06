@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator"
-	"github.com/stellayazilim/stella.backend.tenants/modules"
+	"github.com/stellayazilim/stella.backend.tenants.modules.user/module"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 		})
 	}
 	r := gin.Default()
-	modules.MainModule(r)
+	module.MainModule(r)
 
 	r.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

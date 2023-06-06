@@ -1,11 +1,12 @@
-package user
+package controller
 
 import (
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/stellayazilim/stella.backend.tenants/entities"
+	"github.com/stellayazilim/stella.backend.tenants.modules.user/entity"
+	"github.com/stellayazilim/stella.backend.tenants.modules.user/serializers"
+	"github.com/stellayazilim/stella.backend.tenants.modules.user/service"
 )
 
 // interface
@@ -19,48 +20,34 @@ type UserController interface {
 
 // controller
 type userController struct {
-	userService UserService
+	userService service.UserService
 }
 
 // constructor
-func Controller() UserController {
+func CreateController() UserController {
 	return &userController{
-		userService: Service(),
+		userService: service.CreateService(),
 	}
 }
 
 // get all users
 func (c *userController) GetAll(ctx *gin.Context) {
-	u := c.userService.GetAll()
-	ctx.JSON(200, u)
-}
 
-// save user
-func (c *userController) Create(ctx *gin.Context) {
-
-	user := entities.User{}
-	err := ctx.ShouldBindJSON(&user)
-
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-	c.userService.Create(user)
-
-	ctx.AbortWithStatus(200)
+	responseSerializer := serializers.CreateUserResponseSerializer()
+	ctx.JSON(
+		200,
+		responseSerializer.SerializeAll(c.userService.GetAll()),
+	)
 }
 
 // get single user by id
 func (c *userController) GetById(ctx *gin.Context) {
-
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
-
 	if err != nil {
 		ctx.AbortWithError(400, err)
 		return
 	}
-
 	user, err := c.userService.GetById(id)
-
 	if err != nil {
 		ctx.AbortWithError(404, err)
 		return
@@ -77,7 +64,7 @@ func (c *userController) UpdateById(ctx *gin.Context) {
 		return
 	}
 
-	data := entities.User{}
+	data := entity.User{}
 	ctx.BindJSON(&data)
 
 	err = c.userService.UpdateById(id, data)

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/stellayazilim/stella.backend.tenants/entities"
+	"github.com/stellayazilim/stella.backend.tenants.modules.user/entity"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -14,10 +14,7 @@ var db *gorm.DB
 func InitalizeDatabase() {
 	_db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
-	_db.AutoMigrate(&entities.User{})
-	_db.AutoMigrate(&entities.Category{})
-	_db.AutoMigrate(&entities.Image{})
-	_db.AutoMigrate(&entities.Role{})
+	_db.AutoMigrate(&entity.User{})
 
 	if err != nil {
 		panic(err)
